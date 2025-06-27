@@ -44,7 +44,17 @@ export const PlaceholderImage: React.FC<PlaceholderImageProps> = ({
   };
 
   const gradient = gradients[type] || gradients.default;
-  const gradientId = `gradient-${type}-${Math.random().toString(36).substr(2, 9)}`;
+  // テキストとサイズからハッシュを生成してIDを作成（SSR対応）
+  const createStableId = (str: string) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // 32bit整数に変換
+    }
+    return Math.abs(hash).toString(36);
+  };
+  const gradientId = `gradient-${type}-${createStableId(text + width + height)}`;
 
   return (
     <svg 
