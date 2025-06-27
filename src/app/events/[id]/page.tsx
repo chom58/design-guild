@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { AnimatedButton } from '@/components/ui/AnimatedButton';
 import { PlaceholderImage } from '@/components/ui/PlaceholderImage';
-import { EventRegistrationForm, RegistrationData } from '@/components/forms/EventRegistrationForm';
-import { RegistrationSuccess } from '@/components/ui/RegistrationSuccess';
 import { getEventById } from '@/lib/dataService';
 import { Event } from '@/lib/types';
 
@@ -19,9 +19,15 @@ interface EventDetailPageProps {
 export default function EventDetailPage({ params }: EventDetailPageProps) {
   // For client components in Next.js 15, we need to handle the Promise differently
   const [event, setEvent] = useState<Event | null>(null);
+  const [eventId, setEventId] = useState<string>('');
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     Promise.resolve(params).then(async ({ id }) => {
+      setEventId(id);
       try {
         const eventData = await getEventById(id);
         if (eventData) {
@@ -33,9 +39,21 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
     });
   }, [params]);
 
-  const [showRegistrationForm, setShowRegistrationForm] = useState(false);
+  // Check registration status
+  useEffect(() => {
+    if (session && eventId) {
+      fetch(`/api/events/registration-status?eventId=${eventId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.registered) {
+            setIsRegistered(true);
+          }
+        })
+        .catch(console.error);
+    }
+  }, [session, eventId]);
+
   const [showSuccess, setShowSuccess] = useState(false);
-  const [registrationData, setRegistrationData] = useState<RegistrationData | null>(null);
 
   if (!event) {
     return <div>Loading...</div>;
@@ -45,10 +63,54 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
   const spotsLeft = event.capacity - event.registered;
   const isAlmostFull = spotsLeft < 10;
 
-  const handleRegistration = (data: RegistrationData) => {
-    setRegistrationData(data);
-    setShowRegistrationForm(false);
-    setShowSuccess(true);
+  const handleRegistration = async () => {
+    if (!session) {
+      router.push('/auth/signin');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/events/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ eventId })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsRegistered(true);
+        setShowSuccess(true);
+      } else {
+        alert(data.error || '参加登録に失敗しました');
+      }
+    } catch (error) {
+      alert('参加登録中にエラーが発生しました');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUnregister = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/events/register?eventId=${eventId}`, {
+        method: 'DELETE'
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsRegistered(false);
+      } else {
+        alert(data.error || 'キャンセルに失敗しました');
+      }
+    } catch (error) {
+      alert('キャンセル中にエラーが発生しました');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const categoryLabels = {
@@ -231,13 +293,39 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
 
                 {/* Registration Button */}
                 {isRegistrationOpen ? (
-                  <AnimatedButton 
-                    className="w-full mb-4" 
-                    size="lg"
-                    onClick={() => setShowRegistrationForm(true)}
-                  >
-                    参加申し込み
-                  </AnimatedButton>
+                  session ? (
+                    isRegistered ? (
+                      <div className="space-y-3">
+                        <div className="bg-green-50 text-green-700 px-4 py-3 rounded-lg text-center">
+                          <p className="font-medium">参加登録済み</p>
+                        </div>
+                        <AnimatedButton
+                          variant="outline"
+                          className="w-full"
+                          size="lg"
+                          onClick={handleUnregister}
+                          disabled={isLoading}
+                        >
+                          {isLoading ? 'キャンセル中...' : '参加をキャンセル'}
+                        </AnimatedButton>
+                      </div>
+                    ) : (
+                      <AnimatedButton 
+                        className="w-full mb-4" 
+                        size="lg"
+                        onClick={handleRegistration}
+                        disabled={isLoading}
+                      >
+                        {isLoading ? '登録中...' : '参加申し込み'}
+                      </AnimatedButton>
+                    )
+                  ) : (
+                    <Link href="/auth/signin">
+                      <AnimatedButton className="w-full mb-4" size="lg">
+                        ログインして参加申し込み
+                      </AnimatedButton>
+                    </Link>
+                  )
                 ) : (
                   <button disabled className="w-full px-4 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed">
                     申し込み終了
@@ -300,22 +388,29 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
       
       <Footer />
 
-      {/* Registration Form Modal */}
-      {showRegistrationForm && (
-        <EventRegistrationForm
-          event={event}
-          onClose={() => setShowRegistrationForm(false)}
-          onSubmit={handleRegistration}
-        />
-      )}
-
       {/* Success Modal */}
-      {showSuccess && registrationData && (
-        <RegistrationSuccess
-          event={event}
-          registrationData={registrationData}
-          onClose={() => setShowSuccess(false)}
-        />
+      {showSuccess && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full">
+            <div className="text-center">
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+                <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                参加登録が完了しました！
+              </h3>
+              <p className="text-gray-600 mb-6">
+                イベント詳細はメールでお送りします。<br />
+                当日お会いできることを楽しみにしています。
+              </p>
+              <AnimatedButton onClick={() => setShowSuccess(false)}>
+                閉じる
+              </AnimatedButton>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
