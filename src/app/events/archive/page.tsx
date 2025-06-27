@@ -27,7 +27,7 @@ const pastEvents: Event[] = [
     tags: ['networking', 'design', 'creative'],
     capacity: 100,
     registered: 95,
-    price: 3000,
+    price: 0,
     includes: ['軽食', 'ドリンク', 'ネットワーキング'],
     status: 'completed' as const,
     registrationDeadline: '2023-12-10'
@@ -54,7 +54,7 @@ const pastEvents: Event[] = [
     ],
     capacity: 50,
     registered: 48,
-    price: 8000,
+    price: 0,
     includes: ['教材', '昼食', 'ワークショップキット'],
     status: 'completed' as const,
     registrationDeadline: '2023-11-15'
@@ -81,7 +81,7 @@ const pastEvents: Event[] = [
     ],
     capacity: 80,
     registered: 75,
-    price: 5000,
+    price: 0,
     includes: ['資料', '軽食', 'ワークブック'],
     status: 'completed' as const,
     registrationDeadline: '2023-10-20'
@@ -300,7 +300,7 @@ export default function EventArchivePage() {
                             <span className="font-semibold">{attendanceRate.toFixed(0)}%</span> 満席率
                           </div>
                           <div>
-                            <span className="font-semibold">¥{event.price.toLocaleString()}</span>
+                            <span className="font-semibold text-blue-600">参加無料</span>
                           </div>
                         </div>
                         <AnimatedButton variant="outline" size="sm">

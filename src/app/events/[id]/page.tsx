@@ -203,19 +203,9 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
               <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">参加申し込み</h3>
                 
-                {/* Price */}
-                <div className="mb-6">
-                  {event.earlyBirdPrice && new Date(event.earlyBirdDeadline!) > new Date() ? (
-                    <div>
-                      <p className="text-3xl font-bold text-blue-600">¥{event.earlyBirdPrice.toLocaleString()}</p>
-                      <p className="text-sm text-gray-500 line-through">通常価格: ¥{event.price.toLocaleString()}</p>
-                      <p className="text-sm text-green-600">早割価格（{new Date(event.earlyBirdDeadline!).toLocaleDateString('ja-JP')}まで）</p>
-                    </div>
-                  ) : (
-                    <p className="text-3xl font-bold text-gray-900">
-                      {event.price === 0 ? '無料' : `¥${event.price.toLocaleString()}`}
-                    </p>
-                  )}
+                <div className="mb-6 text-center">
+                  <p className="text-2xl font-bold text-blue-600 mb-2">参加無料</p>
+                  <p className="text-sm text-gray-600">どなたでもお気軽にご参加いただけます</p>
                 </div>
 
                 {/* Capacity */}

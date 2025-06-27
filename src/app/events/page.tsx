@@ -324,27 +324,15 @@ export default function EventsPage() {
                     </div>
                   </div>
 
-                  {/* Price and Capacity */}
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <div>
-                      {event.earlyBirdPrice && new Date(event.earlyBirdDeadline!) > new Date() ? (
-                        <div>
-                          <p className="text-lg font-bold text-blue-600">¥{event.earlyBirdPrice.toLocaleString()}</p>
-                          <p className="text-xs text-gray-500 line-through">¥{event.price.toLocaleString()}</p>
-                        </div>
-                      ) : (
-                        <p className="text-lg font-bold text-gray-900">
-                          {event.price === 0 ? '無料' : `¥${event.price.toLocaleString()}`}
-                        </p>
-                      )}
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm text-gray-600">
-                        {event.registered}/{event.capacity}名
+                  {/* Capacity */}
+                  <div className="flex items-center justify-center pt-4 border-t border-gray-100">
+                    <div className="text-center">
+                      <p className="text-sm text-gray-600 mb-2">
+                        参加者 {event.registered}/{event.capacity}名
                       </p>
-                      <div className="w-20 bg-gray-200 rounded-full h-1.5 mt-1">
+                      <div className="w-32 bg-gray-200 rounded-full h-2 mx-auto">
                         <div 
-                          className={`h-1.5 rounded-full ${isAlmostFull ? 'bg-red-500' : 'bg-blue-600'}`}
+                          className={`h-2 rounded-full ${isAlmostFull ? 'bg-red-500' : 'bg-blue-600'}`}
                           style={{ width: `${(event.registered / event.capacity) * 100}%` }}
                         ></div>
                       </div>

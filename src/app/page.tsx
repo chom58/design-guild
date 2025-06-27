@@ -296,7 +296,7 @@ export default function Home() {
               </AnimatedButton>
             </div>
             <p className="text-sm text-gray-400 mt-6">
-              参加費無料 • いつでも退会可能 • プライバシー保護
+              完全無料 • オープンコミュニティ • 気軽な参加
             </p>
           </div>
         </section>

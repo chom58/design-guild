@@ -63,9 +63,7 @@ export const events: Event[] = [
     ],
     capacity: 150,
     registered: 89,
-    price: 5000,
-    earlyBirdPrice: 3500,
-    earlyBirdDeadline: '2024-06-30',
+    price: 0,
     includes: [
       '全セッション参加権',
       '交流会参加（ドリンク・軽食付き）',
@@ -97,9 +95,7 @@ export const events: Event[] = [
     tags: ['UI', 'Figma', 'ワークショップ', 'スキルアップ'],
     capacity: 20,
     registered: 15,
-    price: 15000,
-    earlyBirdPrice: 12000,
-    earlyBirdDeadline: '2024-08-01',
+    price: 0,
     includes: [
       'ワークショップ参加権',
       'Figmaのプロジェクトファイル',
@@ -129,7 +125,7 @@ export const events: Event[] = [
     tags: ['ポートフォリオ', 'キャリア', 'フィードバック'],
     capacity: 30,
     registered: 28,
-    price: 3000,
+    price: 0,
     includes: [
       '15分間の個別レビュー',
       '全体フィードバックセッション参加',
