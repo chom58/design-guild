@@ -17,6 +17,15 @@ import {
   getCreatorById as getWordPressCreatorById
 } from './dataWordPress';
 
+// WordPress.com無料プラン対応
+import { 
+  getEventsFromWordPressFree, 
+  getCreatorsFromWordPressFree,
+  getEventByIdFromWordPressFree,
+  getCreatorByIdFromWordPressFree,
+  USE_WORDPRESS_FREE
+} from './wordpress-free';
+
 // スタティックデータのインポート
 import { 
   events as staticEvents,
@@ -35,6 +44,12 @@ import { Event, Creator } from './types';
  */
 export async function getUpcomingEvents(): Promise<Event[]> {
   if (USE_WORDPRESS) {
+    if (USE_WORDPRESS_FREE) {
+      const events = await getEventsFromWordPressFree();
+      // 今後のイベントのみフィルタ
+      const now = new Date();
+      return events.filter(event => new Date(event.date) >= now);
+    }
     return getWordPressUpcomingEvents();
   }
   return staticEvents;
@@ -45,6 +60,9 @@ export async function getUpcomingEvents(): Promise<Event[]> {
  */
 export async function getEventById(id: string): Promise<Event | undefined> {
   if (USE_WORDPRESS) {
+    if (USE_WORDPRESS_FREE) {
+      return getEventByIdFromWordPressFree(id);
+    }
     return getWordPressEventById(id);
   }
   return getStaticEventById(id);
@@ -55,6 +73,9 @@ export async function getEventById(id: string): Promise<Event | undefined> {
  */
 export async function getAllEvents(): Promise<Event[]> {
   if (USE_WORDPRESS) {
+    if (USE_WORDPRESS_FREE) {
+      return getEventsFromWordPressFree();
+    }
     return getWordPressAllEvents();
   }
   return staticEvents;
@@ -65,6 +86,9 @@ export async function getAllEvents(): Promise<Event[]> {
  */
 export async function getAllCreators(): Promise<Creator[]> {
   if (USE_WORDPRESS) {
+    if (USE_WORDPRESS_FREE) {
+      return getCreatorsFromWordPressFree();
+    }
     return getWordPressAllCreators();
   }
   return staticCreators;
@@ -75,6 +99,9 @@ export async function getAllCreators(): Promise<Creator[]> {
  */
 export async function getCreatorById(id: string): Promise<Creator | undefined> {
   if (USE_WORDPRESS) {
+    if (USE_WORDPRESS_FREE) {
+      return getCreatorByIdFromWordPressFree(id);
+    }
     return getWordPressCreatorById(id);
   }
   return getStaticCreatorById(id);
