@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { PlaceholderImage } from '@/components/ui/PlaceholderImage';
 import { PortfolioGalleryMultimedia } from '@/components/ui/PortfolioGalleryMultimedia';
 import { SocialLinks } from '@/components/ui/SocialLinks';
-import { getCreatorById } from '@/lib/data';
+import { getCreatorById } from '@/lib/dataService';
 
 interface CreatorDetailPageProps {
   params: Promise<{ id: string }>;
@@ -15,7 +15,7 @@ interface CreatorDetailPageProps {
 
 export async function generateMetadata({ params }: CreatorDetailPageProps): Promise<Metadata> {
   const { id } = await params;
-  const creator = getCreatorById(id);
+  const creator = await getCreatorById(id);
 
   if (!creator) {
     return {
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: CreatorDetailPageProps): Prom
 
 export default async function CreatorDetailPage({ params }: CreatorDetailPageProps) {
   const { id } = await params;
-  const creator = getCreatorById(id);
+  const creator = await getCreatorById(id);
 
   if (!creator) {
     notFound();

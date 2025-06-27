@@ -8,7 +8,7 @@ import { AnimatedButton } from '@/components/ui/AnimatedButton';
 import { PlaceholderImage } from '@/components/ui/PlaceholderImage';
 import { EventRegistrationForm, RegistrationData } from '@/components/forms/EventRegistrationForm';
 import { RegistrationSuccess } from '@/components/ui/RegistrationSuccess';
-import { getEventById } from '@/lib/eventsData';
+import { getEventById } from '@/lib/dataService';
 import { Event } from '@/lib/types';
 
 
@@ -21,10 +21,14 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
   const [event, setEvent] = useState<Event | null>(null);
 
   useEffect(() => {
-    Promise.resolve(params).then(({ id }) => {
-      const eventData = getEventById(id);
-      if (eventData) {
-        setEvent(eventData);
+    Promise.resolve(params).then(async ({ id }) => {
+      try {
+        const eventData = await getEventById(id);
+        if (eventData) {
+          setEvent(eventData);
+        }
+      } catch (error) {
+        console.error('Failed to fetch event:', error);
       }
     });
   }, [params]);

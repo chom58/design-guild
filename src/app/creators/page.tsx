@@ -1,16 +1,32 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { AnimatedCard } from '@/components/ui/AnimatedCard';
 import { motion } from 'framer-motion';
-import { getAllCreators } from '@/lib/data';
-
-// Client component cannot export metadata directly
-// We'll handle this in the layout or use a different approach
+import { getAllCreators } from '@/lib/dataService';
+import { Creator } from '@/lib/types';
 
 export default function CreatorsPage() {
-  const creators = getAllCreators();
+  const [creators, setCreators] = useState<Creator[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchCreators() {
+      try {
+        setLoading(true);
+        const creatorsData = await getAllCreators();
+        setCreators(creatorsData);
+      } catch (error) {
+        console.error('Failed to fetch creators:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchCreators();
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -30,22 +46,29 @@ export default function CreatorsPage() {
           </p>
         </motion.div>
 
-        {/* Creators Grid */}
-        <motion.div 
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.1
+        {/* Loading State */}
+        {loading ? (
+          <div className="text-center py-20">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p className="mt-4 text-gray-600">クリエイターを読み込み中...</p>
+          </div>
+        ) : (
+          /* Creators Grid */
+          <motion.div 
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.1
+                }
               }
-            }
-          }}
-        >
-          {creators.map((creator, index) => (
+            }}
+          >
+            {creators.map((creator, index) => (
             <motion.div
               key={creator.id}
               variants={{
@@ -65,8 +88,9 @@ export default function CreatorsPage() {
                 }}
               />
             </motion.div>
-          ))}
-        </motion.div>
+            ))}
+          </motion.div>
+        )}
 
         {/* Bottom CTA */}
         <div className="mt-16 text-center">

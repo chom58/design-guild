@@ -1,14 +1,29 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { AnimatedButton } from '@/components/ui/AnimatedButton';
 import { AnimatedCard } from '@/components/ui/AnimatedCard';
-import { getAllCreators } from '@/lib/data';
+import { getAllCreators } from '@/lib/dataService';
+import { Creator } from '@/lib/types';
 
 export default function Home() {
-  const featuredCreators = getAllCreators().slice(0, 6); // Show first 6 creators
+  const [featuredCreators, setFeaturedCreators] = useState<Creator[]>([]);
+
+  useEffect(() => {
+    async function fetchCreators() {
+      try {
+        const creators = await getAllCreators();
+        setFeaturedCreators(creators.slice(0, 6)); // Show first 6 creators
+      } catch (error) {
+        console.error('Failed to fetch creators:', error);
+      }
+    }
+    
+    fetchCreators();
+  }, []);
   return (
     <div className="min-h-screen bg-white">
       <Header />

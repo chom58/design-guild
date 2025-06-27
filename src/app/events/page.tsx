@@ -1,21 +1,40 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { AnimatedButton } from '@/components/ui/AnimatedButton';
 import { PlaceholderImage } from '@/components/ui/PlaceholderImage';
 import { EventCalendar } from '@/components/ui/EventCalendar';
-import { getUpcomingEvents } from '@/lib/eventsData';
+import { getUpcomingEvents } from '@/lib/dataService';
 import { Event } from '@/lib/types';
 
 export default function EventsPage() {
-  const allEvents = getUpcomingEvents();
-  const [filteredEvents, setFilteredEvents] = useState<Event[]>(allEvents);
+  const [allEvents, setAllEvents] = useState<Event[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [viewMode, setViewMode] = useState<'grid' | 'calendar'>('grid');
+  const [loading, setLoading] = useState(true);
+
+  // イベントデータを取得
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        setLoading(true);
+        const events = await getUpcomingEvents();
+        setAllEvents(events);
+        setFilteredEvents(events);
+      } catch (error) {
+        console.error('Failed to fetch events:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchEvents();
+  }, []);
 
   const categoryLabels = {
     networking: 'ネットワーキング',
@@ -211,31 +230,39 @@ export default function EventsPage() {
           </button>
         </div>
 
-        {/* Content Area */}
-        {viewMode === 'calendar' ? (
-          <div className="mb-12">
-            <EventCalendar 
-              events={filteredEvents} 
-              onEventClick={handleEventClick}
-            />
+        {/* Loading State */}
+        {loading ? (
+          <div className="text-center py-20">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p className="mt-4 text-gray-600">イベントを読み込み中...</p>
           </div>
         ) : (
-          /* Events Grid */
-          <motion.div 
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: {
-                  staggerChildren: 0.1
-                }
-              }
-            }}
-          >
-          {filteredEvents.length === 0 ? (
+          <>
+            {/* Content Area */}
+            {viewMode === 'calendar' ? (
+              <div className="mb-12">
+                <EventCalendar 
+                  events={filteredEvents} 
+                  onEventClick={handleEventClick}
+                />
+              </div>
+            ) : (
+              /* Events Grid */
+              <motion.div 
+                className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.1
+                    }
+                  }
+                }}
+              >
+              {filteredEvents.length === 0 ? (
             <div className="col-span-full text-center py-12">
               <div className="text-gray-400 mb-4">
                 <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -343,10 +370,12 @@ export default function EventsPage() {
             );
           }))}
           </motion.div>
+            )}
+          </>
         )}
 
         {/* Newsletter CTA - Only show in grid view */}
-        {viewMode === 'grid' && (
+        {!loading && viewMode === 'grid' && (
         <motion.div 
           className="mt-20 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 text-center"
           initial={{ opacity: 0, y: 20 }}
