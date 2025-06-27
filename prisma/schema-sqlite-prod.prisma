@@ -1,0 +1,55 @@
+// This is your Prisma schema file for SQLite (production simplified version)
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./prod.db"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String?
+  profession    String?
+  bio           String?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  eventRegistrations EventRegistration[]
+  sessions      Session[]
+}
+
+model Event {
+  id            String    @id
+  // Relations
+  registrations EventRegistration[]
+}
+
+model EventRegistration {
+  id            String    @id @default(cuid())
+  userId        String
+  eventId       String
+  registeredAt  DateTime  @default(now())
+  status        String    @default("confirmed") // confirmed, cancelled, waitlist
+  
+  // Relations
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event         Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, eventId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
