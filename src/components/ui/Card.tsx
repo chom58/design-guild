@@ -7,8 +7,6 @@ export interface CreatorCardProps {
   id: string;
   name: string;
   profession: string;
-  profileImage: string;
-  portfolioImage: string;
   skills: Array<'graphic' | 'illustration' | 'branding'>;
   onClick?: (id: string) => void;
 }
