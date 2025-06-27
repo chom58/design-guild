@@ -1,9 +1,22 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { validateEmail, validatePassword, validateName } from "@/lib/validation";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
   try {
+    // IPアドレスによるレート制限
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    const { allowed, remainingAttempts } = checkRateLimit(`register:${ip}`, 3, 60 * 60 * 1000); // 1時間に3回まで
+    
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "登録試行回数の上限に達しました。しばらくしてからお試しください。" },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const { email, password, name, profession } = body;
 
@@ -15,9 +28,23 @@ export async function POST(request: Request) {
       );
     }
 
-    if (password.length < 6) {
+    if (!validateEmail(email)) {
       return NextResponse.json(
-        { error: "パスワードは6文字以上で入力してください" },
+        { error: "有効なメールアドレスを入力してください" },
+        { status: 400 }
+      );
+    }
+
+    if (!validatePassword(password)) {
+      return NextResponse.json(
+        { error: "パスワードは6文字以上128文字以下で入力してください" },
+        { status: 400 }
+      );
+    }
+
+    if (name && !validateName(name)) {
+      return NextResponse.json(
+        { error: "名前に使用できない文字が含まれています" },
         { status: 400 }
       );
     }
