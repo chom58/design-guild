@@ -192,8 +192,6 @@ export default function Home() {
                   id={creator.id}
                   name={creator.name}
                   profession={creator.profession}
-                  profileImage={creator.profileImage}
-                  portfolioImage={creator.portfolio[0]?.image || '/images/placeholder.svg'}
                   skills={creator.skills}
                   onClick={(id) => console.log(`Clicked creator: ${id}`)}
                 />

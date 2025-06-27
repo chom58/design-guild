@@ -17,8 +17,6 @@ export const Card: React.FC<CreatorCardProps> = ({
   id,
   name,
   profession,
-  profileImage,
-  portfolioImage,
   skills,
   onClick
 }) => {
