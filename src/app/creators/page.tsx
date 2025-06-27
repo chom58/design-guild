@@ -2,7 +2,8 @@
 
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { Card } from '@/components/ui/Card';
+import { AnimatedCard } from '@/components/ui/AnimatedCard';
+import { motion } from 'framer-motion';
 import { getAllCreators } from '@/lib/data';
 
 // Client component cannot export metadata directly
@@ -16,30 +17,56 @@ export default function CreatorsPage() {
       <Header />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         {/* Page Header */}
-        <div className="text-center mb-16">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
           <h1 className="text-4xl font-bold text-gray-900 mb-6">クリエイター一覧</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             デザインギルドで活躍する才能豊かなクリエイターたちをご紹介します。
             各クリエイターの詳細プロフィールやポートフォリオをご覧いただけます。
           </p>
-        </div>
+        </motion.div>
 
         {/* Creators Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {creators.map((creator) => (
-            <Card
+        <motion.div 
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1
+              }
+            }
+          }}
+        >
+          {creators.map((creator, index) => (
+            <motion.div
               key={creator.id}
-              id={creator.id}
-              name={creator.name}
-              profession={creator.profession}
-              skills={creator.skills}
-              onClick={(id) => {
-                // Navigate to creator detail page
-                window.location.href = `/creators/${id}`;
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 }
               }}
-            />
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <AnimatedCard
+                id={creator.id}
+                name={creator.name}
+                profession={creator.profession}
+                skills={creator.skills}
+                onClick={(id) => {
+                  // Navigate to creator detail page
+                  window.location.href = `/creators/${id}`;
+                }}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Bottom CTA */}
         <div className="mt-16 text-center">

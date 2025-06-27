@@ -1,9 +1,10 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
+import { AnimatedButton } from '@/components/ui/AnimatedButton';
+import { AnimatedCard } from '@/components/ui/AnimatedCard';
 import { getAllCreators } from '@/lib/data';
 
 export default function Home() {
@@ -14,29 +15,54 @@ export default function Home() {
       
       <main>
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-blue-50 to-purple-50 py-20 px-4">
-          <div className="max-w-7xl mx-auto text-center">
-            <div className="mb-6">
+        <section className="relative bg-gradient-to-br from-blue-50 to-purple-50 py-20 px-4 overflow-hidden">
+          <motion.div 
+            className="max-w-7xl mx-auto text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.div 
+              className="mb-6"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
               <span className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
                 🎉 次回イベント開催決定！
               </span>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+            </motion.div>
+            <motion.h1 
+              className="text-4xl md:text-6xl font-bold text-gray-900 mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+            >
               デザインギルド
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            </motion.h1>
+            <motion.p 
+              className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
               クリエイターとの出会いを創り出す<br />
               デザインコミュニティプラットフォーム
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="shadow-lg">
+            </motion.p>
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            >
+              <AnimatedButton size="lg" className="shadow-lg">
                 イベントに参加する
-              </Button>
-              <Button variant="outline" size="lg">
+              </AnimatedButton>
+              <AnimatedButton variant="outline" size="lg">
                 クリエイターを探す
-              </Button>
-            </div>
-          </div>
+              </AnimatedButton>
+            </motion.div>
+          </motion.div>
         </section>
 
         {/* About Section */}
@@ -52,43 +78,87 @@ export default function Home() {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <motion.div 
+              className="grid md:grid-cols-3 gap-8"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.2
+                  }
+                }
+              }}
+            >
+              <motion.div 
+                className="text-center"
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+              >
+                <motion.div 
+                  className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
                   <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
-                </div>
+                </motion.div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">コミュニティ</h3>
                 <p className="text-gray-600">
                   同じ志を持つクリエイター同士が繋がり、刺激し合える環境を提供します。
                 </p>
-              </div>
+              </motion.div>
               
-              <div className="text-center">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <motion.div 
+                className="text-center"
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+              >
+                <motion.div 
+                  className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                  whileHover={{ scale: 1.1, rotate: -5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
                   <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                </div>
+                </motion.div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">スキルアップ</h3>
                 <p className="text-gray-600">
                   ワークショップや勉強会を通じて、最新のデザイントレンドとスキルを学べます。
                 </p>
-              </div>
+              </motion.div>
               
-              <div className="text-center">
-                <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <motion.div 
+                className="text-center"
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+              >
+                <motion.div 
+                  className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
                   <svg className="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 6V9a2 2 0 00-2-2H10a2 2 0 00-2 2v3.1M15 13l-3-3-3 3" />
                   </svg>
-                </div>
+                </motion.div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">キャリア</h3>
                 <p className="text-gray-600">
                   プロジェクトマッチングや転職支援を通じて、キャリアアップをサポートします。
                 </p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 
@@ -104,20 +174,41 @@ export default function Home() {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <motion.div 
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.1 }}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.1
+                  }
+                }
+              }}
+            >
               {featuredCreators.map((creator) => (
-                <Card
+                <motion.div
                   key={creator.id}
-                  id={creator.id}
-                  name={creator.name}
-                  profession={creator.profession}
-                  skills={creator.skills}
-                  onClick={(id) => {
-                    window.location.href = `/creators/${id}`;
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 }
                   }}
-                />
+                >
+                  <AnimatedCard
+                    id={creator.id}
+                    name={creator.name}
+                    profession={creator.profession}
+                    skills={creator.skills}
+                    onClick={(id) => {
+                      window.location.href = `/creators/${id}`;
+                    }}
+                  />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -152,9 +243,9 @@ export default function Home() {
                       東京・渋谷クリエイティブセンター
                     </p>
                   </div>
-                  <Button variant="secondary" size="lg">
+                  <AnimatedButton variant="secondary" size="lg">
                     詳細を見る
-                  </Button>
+                  </AnimatedButton>
                 </div>
                 <div className="relative">
                   <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
@@ -197,12 +288,12 @@ export default function Home() {
               今すぐコミュニティに参加して、新しい可能性を発見しましょう。
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="primary" size="lg" className="bg-blue-600 hover:bg-blue-700">
+              <AnimatedButton variant="primary" size="lg" className="bg-blue-600 hover:bg-blue-700">
                 今すぐ参加する
-              </Button>
-              <Button variant="outline" size="lg" className="border-gray-300 text-gray-300 hover:bg-gray-800">
+              </AnimatedButton>
+              <AnimatedButton variant="outline" size="lg" className="border-gray-300 text-gray-300 hover:bg-gray-800">
                 詳細を見る
-              </Button>
+              </AnimatedButton>
             </div>
             <p className="text-sm text-gray-400 mt-6">
               参加費無料 • いつでも退会可能 • プライバシー保護

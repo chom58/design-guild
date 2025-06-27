@@ -5,7 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/Button';
 import { PlaceholderImage } from '@/components/ui/PlaceholderImage';
-import { PortfolioGallery } from '@/components/ui/PortfolioGallery';
+import { PortfolioGalleryMultimedia } from '@/components/ui/PortfolioGalleryMultimedia';
 import { SocialLinks } from '@/components/ui/SocialLinks';
 import { getCreatorById } from '@/lib/data';
 
@@ -147,7 +147,7 @@ export default async function CreatorDetailPage({ params }: CreatorDetailPagePro
             {/* Portfolio Section */}
             <section className="mb-12">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">ポートフォリオ</h2>
-              <PortfolioGallery portfolio={creator.portfolio} />
+              <PortfolioGalleryMultimedia portfolio={creator.portfolio} />
             </section>
           </div>
 
