@@ -8,6 +8,9 @@ const nextConfig = {
       },
     ],
     unoptimized: true, // For static export if needed
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 };
 
