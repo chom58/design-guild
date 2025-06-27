@@ -3,7 +3,8 @@
  */
 
 // WordPress連携の有効/無効を切り替え
-export const USE_WORDPRESS = process.env.NEXT_PUBLIC_USE_WORDPRESS === 'true';
+// 管理画面を使用するため、WordPressモードは無効化
+export const USE_WORDPRESS = false;
 
 // WordPress API設定
 export const WORDPRESS_CONFIG = {
