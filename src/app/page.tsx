@@ -11,12 +11,12 @@ const featuredCreators: Creator[] = [
   {
     id: '1',
     name: '田中 美咲',
-    profileImage: '/images/creators/tanaka.jpg',
+    profileImage: '/images/creators/tanaka.svg',
     profession: 'グラフィックデザイナー',
     bio: 'ブランディングとグラフィックデザインを専門とし、10年以上の経験を持つ。',
     skills: ['graphic', 'branding'],
     portfolio: [
-      { title: 'ブランドアイデンティティ', image: '/images/portfolio/brand1.jpg', description: 'スタートアップ企業のブランディング' }
+      { title: 'ブランドアイデンティティ', image: '/images/portfolio/brand1.svg', description: 'スタートアップ企業のブランディング' }
     ],
     social: { twitter: 'tanaka_design', instagram: 'tanaka.design' },
     email: 'tanaka@example.com'
@@ -24,12 +24,12 @@ const featuredCreators: Creator[] = [
   {
     id: '2',
     name: '佐藤 健太',
-    profileImage: '/images/creators/sato.jpg',
+    profileImage: '/images/creators/sato.svg',
     profession: 'イラストレーター',
     bio: 'キャラクターデザインとイラストレーションを得意とするクリエイター。',
     skills: ['illustration'],
     portfolio: [
-      { title: 'キャラクターデザイン', image: '/images/portfolio/character1.jpg', description: 'ゲーム用キャラクターデザイン' }
+      { title: 'キャラクターデザイン', image: '/images/portfolio/character1.svg', description: 'ゲーム用キャラクターデザイン' }
     ],
     social: { instagram: 'sato.illust', website: 'https://sato-illust.com' },
     email: 'sato@example.com'
@@ -37,12 +37,12 @@ const featuredCreators: Creator[] = [
   {
     id: '3',
     name: '山田 あかり',
-    profileImage: '/images/creators/yamada.jpg',
+    profileImage: '/images/creators/yamada.svg',
     profession: 'ブランドデザイナー',
     bio: 'ブランド戦略とビジュアルアイデンティティの専門家。',
     skills: ['branding', 'graphic'],
     portfolio: [
-      { title: 'ブランド戦略', image: '/images/portfolio/strategy1.jpg', description: 'コーポレートブランディング' }
+      { title: 'ブランド戦略', image: '/images/portfolio/strategy1.svg', description: 'コーポレートブランディング' }
     ],
     social: { linkedin: 'yamada-akari', website: 'https://yamada-brand.com' },
     email: 'yamada@example.com'
@@ -50,12 +50,12 @@ const featuredCreators: Creator[] = [
   {
     id: '4',
     name: '鈴木 翔太',
-    profileImage: '/images/creators/suzuki.jpg',
+    profileImage: '/images/creators/suzuki.svg',
     profession: 'UIデザイナー',
     bio: 'ユーザーエクスペリエンスを重視したUIデザインを手がける。',
     skills: ['graphic'],
     portfolio: [
-      { title: 'モバイルアプリUI', image: '/images/portfolio/mobile1.jpg', description: 'ECアプリのUIデザイン' }
+      { title: 'モバイルアプリUI', image: '/images/portfolio/mobile1.svg', description: 'ECアプリのUIデザイン' }
     ],
     social: { twitter: 'suzuki_ui', linkedin: 'suzuki-shota' },
     email: 'suzuki@example.com'
@@ -63,12 +63,12 @@ const featuredCreators: Creator[] = [
   {
     id: '5',
     name: '高橋 みゆき',
-    profileImage: '/images/creators/takahashi.jpg',
+    profileImage: '/images/creators/takahashi.svg',
     profession: 'イラストレーター',
     bio: '水彩画タッチのイラストレーションを専門とする。',
     skills: ['illustration'],
     portfolio: [
-      { title: '水彩イラスト', image: '/images/portfolio/watercolor1.jpg', description: '書籍挿絵イラスト' }
+      { title: '水彩イラスト', image: '/images/portfolio/watercolor1.svg', description: '書籍挿絵イラスト' }
     ],
     social: { instagram: 'takahashi.art', website: 'https://takahashi-art.com' },
     email: 'takahashi@example.com'
@@ -76,12 +76,12 @@ const featuredCreators: Creator[] = [
   {
     id: '6',
     name: '中村 大輔',
-    profileImage: '/images/creators/nakamura.jpg',
+    profileImage: '/images/creators/nakamura.svg',
     profession: 'ブランドコンサルタント',
     bio: 'ブランド戦略からビジュアルまで一貫したブランディングを提供。',
     skills: ['branding', 'graphic'],
     portfolio: [
-      { title: 'ブランドコンサルティング', image: '/images/portfolio/consulting1.jpg', description: '企業ブランド再構築' }
+      { title: 'ブランドコンサルティング', image: '/images/portfolio/consulting1.svg', description: '企業ブランド再構築' }
     ],
     social: { linkedin: 'nakamura-daisuke', twitter: 'nakamura_brand' },
     email: 'nakamura@example.com'
@@ -193,7 +193,7 @@ export default function Home() {
                   name={creator.name}
                   profession={creator.profession}
                   profileImage={creator.profileImage}
-                  portfolioImage={creator.portfolio[0]?.image || '/images/placeholder.jpg'}
+                  portfolioImage={creator.portfolio[0]?.image || '/images/placeholder.svg'}
                   skills={creator.skills}
                   onClick={(id) => console.log(`Clicked creator: ${id}`)}
                 />
