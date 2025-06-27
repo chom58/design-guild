@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 export interface CreatorCardProps {
   id: string;
@@ -40,10 +41,11 @@ export const Card: React.FC<CreatorCardProps> = ({
     >
       {/* Portfolio Preview Image */}
       <div className="relative h-48 overflow-hidden">
-        <img
+        <Image
           src={portfolioImage}
           alt={`${name}'s portfolio`}
-          className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+          fill
+          className="object-cover transition-transform duration-300 hover:scale-110"
         />
       </div>
 
@@ -51,10 +53,12 @@ export const Card: React.FC<CreatorCardProps> = ({
       <div className="p-4">
         {/* Profile Section */}
         <div className="flex items-center mb-3">
-          <img
+          <Image
             src={profileImage}
             alt={name}
-            className="w-10 h-10 rounded-full object-cover mr-3 border-2 border-gray-200"
+            width={40}
+            height={40}
+            className="rounded-full object-cover mr-3 border-2 border-gray-200"
           />
           <div>
             <h3 className="font-semibold text-gray-900 text-sm">{name}</h3>
