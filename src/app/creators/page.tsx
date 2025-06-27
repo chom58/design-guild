@@ -5,6 +5,9 @@ import { Footer } from '@/components/layout/Footer';
 import { Card } from '@/components/ui/Card';
 import { getAllCreators } from '@/lib/data';
 
+// Client component cannot export metadata directly
+// We'll handle this in the layout or use a different approach
+
 export default function CreatorsPage() {
   const creators = getAllCreators();
 

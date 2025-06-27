@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/Button';
@@ -10,6 +11,53 @@ import { getCreatorById } from '@/lib/data';
 
 interface CreatorDetailPageProps {
   params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: CreatorDetailPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const creator = getCreatorById(id);
+
+  if (!creator) {
+    return {
+      title: 'クリエイターが見つかりません',
+      description: '指定されたクリエイターは見つかりませんでした。',
+    };
+  }
+
+  const skillsText = creator.skills.join('、');
+  
+  return {
+    title: `${creator.name} - ${creator.profession}`,
+    description: `${creator.name}は${creator.profession}として活動するデザインギルドのクリエイターです。専門分野: ${skillsText}。プロフィール、ポートフォリオ、お問い合わせ情報をご覧いただけます。`,
+    keywords: [
+      creator.name,
+      creator.profession,
+      ...creator.skills,
+      'デザイナー',
+      'クリエイター',
+      'ポートフォリオ',
+      'お仕事依頼'
+    ],
+    openGraph: {
+      title: `${creator.name} - ${creator.profession} | デザインギルド`,
+      description: `${creator.name}のプロフィールとポートフォリオをご覧ください。専門分野: ${skillsText}`,
+      url: `/creators/${id}`,
+      type: 'profile',
+      images: [
+        {
+          url: creator.profileImage,
+          width: 400,
+          height: 400,
+          alt: `${creator.name}のプロフィール画像`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary',
+      title: `${creator.name} - ${creator.profession}`,
+      description: `${creator.name}のプロフィールとポートフォリオをご覧ください。`,
+    },
+  };
 }
 
 export default async function CreatorDetailPage({ params }: CreatorDetailPageProps) {
