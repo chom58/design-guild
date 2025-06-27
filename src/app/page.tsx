@@ -55,10 +55,10 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.8 }}
             >
-              <AnimatedButton size="lg" className="shadow-lg">
+              <AnimatedButton size="lg" className="shadow-lg" onClick={() => window.location.href = '/events'}>
                 イベントに参加する
               </AnimatedButton>
-              <AnimatedButton variant="outline" size="lg">
+              <AnimatedButton variant="outline" size="lg" onClick={() => window.location.href = '/creators'}>
                 クリエイターを探す
               </AnimatedButton>
             </motion.div>
@@ -243,7 +243,7 @@ export default function Home() {
                       東京・渋谷クリエイティブセンター
                     </p>
                   </div>
-                  <AnimatedButton variant="secondary" size="lg">
+                  <AnimatedButton variant="secondary" size="lg" onClick={() => window.location.href = '/events/1'}>
                     詳細を見る
                   </AnimatedButton>
                 </div>
@@ -288,10 +288,10 @@ export default function Home() {
               今すぐコミュニティに参加して、新しい可能性を発見しましょう。
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <AnimatedButton variant="primary" size="lg" className="bg-blue-600 hover:bg-blue-700">
+              <AnimatedButton variant="primary" size="lg" className="bg-blue-600 hover:bg-blue-700" onClick={() => window.location.href = '/events'}>
                 今すぐ参加する
               </AnimatedButton>
-              <AnimatedButton variant="outline" size="lg" className="border-gray-300 text-gray-300 hover:bg-gray-800">
+              <AnimatedButton variant="outline" size="lg" className="border-gray-300 text-gray-300 hover:bg-gray-800" onClick={() => window.location.href = '/events'}>
                 詳細を見る
               </AnimatedButton>
             </div>
