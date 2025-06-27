@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { PlaceholderImage } from './PlaceholderImage';
 
 export interface CreatorCardProps {
   id: string;
@@ -39,11 +40,13 @@ export const Card: React.FC<CreatorCardProps> = ({
       onClick={handleClick}
     >
       {/* Portfolio Preview Image */}
-      <div className="relative h-48 overflow-hidden">
-        <img
-          src={portfolioImage}
-          alt={`${name}'s portfolio`}
-          className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+      <div className="relative h-48 overflow-hidden flex items-center justify-center">
+        <PlaceholderImage
+          width={600}
+          height={192}
+          text="Portfolio"
+          type="portfolio"
+          className="transition-transform duration-300 hover:scale-110"
         />
       </div>
 
@@ -51,11 +54,15 @@ export const Card: React.FC<CreatorCardProps> = ({
       <div className="p-4">
         {/* Profile Section */}
         <div className="flex items-center mb-3">
-          <img
-            src={profileImage}
-            alt={name}
-            className="w-10 h-10 rounded-full object-cover mr-3 border-2 border-gray-200"
-          />
+          <div className="rounded-full overflow-hidden mr-3 border-2 border-gray-200">
+            <PlaceholderImage
+              width={40}
+              height={40}
+              text={name.split(' ')[0]}
+              type="profile"
+              className="object-cover"
+            />
+          </div>
           <div>
             <h3 className="font-semibold text-gray-900 text-sm">{name}</h3>
             <p className="text-gray-600 text-xs">{profession}</p>
