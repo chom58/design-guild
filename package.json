@@ -6,7 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-images": "node scripts/generate-images.js",
+    "generate-images:photos": "node scripts/generate-images.js --photos",
+    "generate-placeholders": "node scripts/create-better-placeholders.js"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",
