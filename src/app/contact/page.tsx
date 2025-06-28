@@ -1,7 +1,29 @@
+'use client';
+
+import { useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 
 export default function ContactPage() {
+  const [editingEvent, setEditingEvent] = useState(null);
+  const [showEventForm, setShowEventForm] = useState(false);
+  const [editingCreator, setEditingCreator] = useState(null);
+  const [showCreatorForm, setShowCreatorForm] = useState(false);
+
+  // サンプルデータ（後でAPIに接続）
+  const [events, setEvents] = useState([
+    { id: 1, title: 'UI/UXデザインワークショップ', date: '2024-07-15', participants: 25, status: '受付中' },
+    { id: 2, title: 'ブランディングセミナー', date: '2024-07-20', participants: 42, status: '満席' },
+    { id: 3, title: 'ポートフォリオレビュー会', date: '2024-07-25', participants: 18, status: '受付中' }
+  ]);
+
+  const [creators, setCreators] = useState([
+    { id: 1, name: '田中 美咲', role: 'UI/UXデザイナー', skills: 'Figma, Sketch', projects: 12 },
+    { id: 2, name: '佐藤 健太', role: 'グラフィックデザイナー', skills: 'Photoshop, Illustrator', projects: 8 },
+    { id: 3, name: '山田 花子', role: 'イラストレーター', skills: 'Procreate, Clip Studio', projects: 15 },
+    { id: 4, name: '鈴木 太郎', role: 'ブランドデザイナー', skills: 'After Effects, Cinema 4D', projects: 6 }
+  ]);
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -40,50 +62,127 @@ export default function ContactPage() {
           <div className="bg-gray-50 rounded-lg p-6 mb-8">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">📅 イベント管理</h3>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
+              <button 
+                onClick={() => setShowEventForm(true)}
+                className="px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+              >
                 + 新規作成
               </button>
             </div>
             
-            <div className="space-y-3">
-              <div className="bg-white p-4 rounded border">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h4 className="font-medium">UI/UXデザインワークショップ</h4>
-                    <p className="text-sm text-gray-600">2024-07-15 | 25名参加 | 受付中</p>
-                  </div>
-                  <div className="space-x-2">
-                    <button className="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm">編集</button>
-                    <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm">詳細</button>
-                  </div>
+            {/* イベント新規作成フォーム */}
+            {showEventForm && (
+              <div className="bg-blue-50 p-4 rounded-lg mb-4 border">
+                <h4 className="font-medium mb-3">新しいイベントを作成</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                  <input 
+                    type="text" 
+                    placeholder="イベントタイトル" 
+                    className="px-3 py-2 border rounded text-sm"
+                  />
+                  <input 
+                    type="date" 
+                    className="px-3 py-2 border rounded text-sm"
+                  />
+                </div>
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={() => {
+                      const newEvent = {
+                        id: events.length + 1,
+                        title: '新しいイベント',
+                        date: '2024-08-01',
+                        participants: 0,
+                        status: '受付中'
+                      };
+                      setEvents([...events, newEvent]);
+                      setShowEventForm(false);
+                    }}
+                    className="px-4 py-2 bg-blue-600 text-white rounded text-sm"
+                  >
+                    作成
+                  </button>
+                  <button 
+                    onClick={() => setShowEventForm(false)}
+                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded text-sm"
+                  >
+                    キャンセル
+                  </button>
                 </div>
               </div>
-              
-              <div className="bg-white p-4 rounded border">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h4 className="font-medium">ブランディングセミナー</h4>
-                    <p className="text-sm text-gray-600">2024-07-20 | 42名参加 | 満席</p>
-                  </div>
-                  <div className="space-x-2">
-                    <button className="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm">編集</button>
-                    <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm">詳細</button>
-                  </div>
-                </div>
-              </div>
+            )}
 
-              <div className="bg-white p-4 rounded border">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h4 className="font-medium">ポートフォリオレビュー会</h4>
-                    <p className="text-sm text-gray-600">2024-07-25 | 18名参加 | 受付中</p>
+            <div className="space-y-3">
+              {events.map((event) => (
+                <div key={event.id} className="bg-white p-4 rounded border">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h4 className="font-medium">{event.title}</h4>
+                      <p className="text-sm text-gray-600">
+                        {event.date} | {event.participants}名参加 | {event.status}
+                      </p>
+                    </div>
+                    <div className="space-x-2">
+                      <button 
+                        onClick={() => setEditingEvent(event.id)}
+                        className="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200"
+                      >
+                        編集
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setEvents(events.filter(e => e.id !== event.id));
+                        }}
+                        className="px-3 py-1 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200"
+                      >
+                        削除
+                      </button>
+                    </div>
                   </div>
-                  <div className="space-x-2">
-                    <button className="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm">編集</button>
-                    <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm">詳細</button>
-                  </div>
+                  
+                  {/* インライン編集フォーム */}
+                  {editingEvent === event.id && (
+                    <div className="mt-3 pt-3 border-t bg-gray-50 p-3 rounded">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                        <input 
+                          type="text" 
+                          defaultValue={event.title}
+                          className="px-3 py-2 border rounded text-sm"
+                          onChange={(e) => {
+                            setEvents(events.map(ev => 
+                              ev.id === event.id ? {...ev, title: e.target.value} : ev
+                            ));
+                          }}
+                        />
+                        <input 
+                          type="date" 
+                          defaultValue={event.date}
+                          className="px-3 py-2 border rounded text-sm"
+                          onChange={(e) => {
+                            setEvents(events.map(ev => 
+                              ev.id === event.id ? {...ev, date: e.target.value} : ev
+                            ));
+                          }}
+                        />
+                      </div>
+                      <div className="flex space-x-2">
+                        <button 
+                          onClick={() => setEditingEvent(null)}
+                          className="px-3 py-1 bg-green-600 text-white rounded text-sm"
+                        >
+                          保存
+                        </button>
+                        <button 
+                          onClick={() => setEditingEvent(null)}
+                          className="px-3 py-1 bg-gray-300 text-gray-700 rounded text-sm"
+                        >
+                          キャンセル
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
+              ))}
             </div>
           </div>
 
