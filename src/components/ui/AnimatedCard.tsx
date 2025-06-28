@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Card, CreatorCardProps } from './Card';
+import { CreatorCard, CreatorCardProps } from './Card';
 
 export const AnimatedCard: React.FC<CreatorCardProps> = (props) => {
   return (
@@ -19,7 +19,7 @@ export const AnimatedCard: React.FC<CreatorCardProps> = (props) => {
         ease: "easeOut"
       }}
     >
-      <Card {...props} />
+      <CreatorCard {...props} />
     </motion.div>
   );
 };

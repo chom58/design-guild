@@ -11,7 +11,22 @@ export interface CreatorCardProps {
   onClick?: (id: string) => void;
 }
 
-export const Card: React.FC<CreatorCardProps> = ({
+export interface GenericCardProps {
+  className?: string;
+  children: React.ReactNode;
+}
+
+// Generic Card component
+export const Card: React.FC<GenericCardProps> = ({ className, children }) => {
+  return (
+    <div className={`bg-white rounded-lg shadow-md overflow-hidden ${className || ''}`}>
+      {children}
+    </div>
+  );
+};
+
+// Creator Card component
+export const CreatorCard: React.FC<CreatorCardProps> = ({
   id,
   name,
   profession,
